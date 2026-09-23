@@ -1,24 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { WeddingInvitation } from "@/components/wedding/WeddingInvitation";
+import previewImage from "@/assets/osama-eman-wedding-preview.jpg";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Osama & Eman's Wedding — October 8, 2026" },
+      { name: "description", content: "You are warmly invited to celebrate the wedding of Osama and Eman at Royal Villa Hall." },
+      { property: "og:title", content: "Osama & Eman's Wedding — October 8, 2026" },
+      { property: "og:description", content: "Open our invitation and join us for a beautiful evening at Royal Villa Hall." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+  void previewImage;
+  return <WeddingInvitation />;
 }
