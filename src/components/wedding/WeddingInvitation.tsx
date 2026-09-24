@@ -98,7 +98,7 @@ function Countdown() {
   const remaining = Math.max(0, target - now);
   const values = [Math.floor(remaining / 86400000), Math.floor(remaining / 3600000) % 24, Math.floor(remaining / 60000) % 60, Math.floor(remaining / 1000) % 60];
   const labels = ["يوم", "ساعة", "دقيقة", "ثانية"];
-  const eastern = (value: number) => String(value).padStart(2, "0").replace(/[0-9]/g, digit => "٠١٢٣٤٥٦٧٨٩"[Number(digit)]);
+  const eastern = (value: number) => String(value).padStart(2, "0").replace(/[0-9]/g, digit => "٠١٢٣٤٥٦٧٨٩".charAt(Number(digit)));
   const downloadIcs = () => {
     const body = `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Osama & Eman//Wedding//EN\r\nBEGIN:VEVENT\r\nUID:osama-eman-wedding-20261008\r\nDTSTAMP:20260923T091400Z\r\nDTSTART:20261008T170000Z\r\nDTEND:20261008T210000Z\r\nSUMMARY:Osama & Eman's Wedding\r\nLOCATION:${config.venue.name} - ${config.venue.address}\r\nDESCRIPTION:Celebrate the wedding of Osama & Eman\r\nEND:VEVENT\r\nEND:VCALENDAR`;
     const url = URL.createObjectURL(new Blob([body], { type: "text/calendar" })); const a = document.createElement("a"); a.href = url; a.download = "osama-eman-wedding.ics"; a.click(); URL.revokeObjectURL(url);
