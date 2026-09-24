@@ -175,7 +175,7 @@
   --radius: .375rem;
 }
 
-html { scroll-behavior: smooth; background: var(--ink);   font-size: 65%; }
+html { scroll-behavior: smooth; background: var(--ink);   font-size: 60%; }
 body { margin: 0; overflow-x: hidden; font-family: "Cormorant Garamond", serif; }
 button, input, textarea { letter-spacing: 0; }
 .wedding-page { min-height: 100vh; overflow: hidden; background: var(--ink); color: var(--ink); }
