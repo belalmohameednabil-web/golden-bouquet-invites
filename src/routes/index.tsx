@@ -4,10 +4,10 @@ import { WeddingInvitation } from "@/components/wedding/WeddingInvitation";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Osama & Eman's Wedding — October 8, 2026" },
-      { name: "description", content: "You are warmly invited to celebrate the wedding of Osama and Eman at Royal Villa Hall." },
-      { property: "og:title", content: "Osama & Eman's Wedding — October 8, 2026" },
-      { property: "og:description", content: "Open our invitation and join us for a beautiful evening at Royal Villa Hall." },
+      { title: "دعوة زفاف أسامة & إيمان" },
+      { name: "description", content: "الخميس ٨ أكتوبر ٢٠٢٦ – قاعة رويال فيلا" },
+      { property: "og:title", content: "دعوة زفاف أسامة & إيمان" },
+      { property: "og:description", content: "الخميس ٨ أكتوبر ٢٠٢٦ – قاعة رويال فيلا" },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://id-preview--c331dc56-ce28-4410-a829-bf418d7d7784.lovable.app/wedding-preview.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
