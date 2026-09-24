@@ -1,5 +1,5 @@
 export const weddingConfig = {
-  couple: { first: "أسامة", second: "إيمان", display: "أسامة & إيمان", monogram: "أ & إ" },
+  couple: { first: "Osama", second: "Eman", display: "Osama & Eman", monogram: "O.E" },
   event: {
     iso: "2026-10-08T20:00:00+03:00",
     dateLong: "الخميس ٨ أكتوبر ٢٠٢٦",
