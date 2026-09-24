@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { CallaLilies, GoldDivider, Hydrangea, VillaIllustration } from "./Ornaments";
+import { CallaLilies, Chandelier, GoldDivider, Hydrangea, VillaIllustration } from "./Ornaments";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 type Rsvp = Tables<"wedding_rsvps">;
@@ -40,14 +40,18 @@ function Intro({ onOpen, onStartMusic }: { onOpen: () => void; onStartMusic: () 
       <CallaLilies className="intro-floral intro-floral-left" />
       <CallaLilies className="intro-floral intro-floral-right" />
       <div className="relative z-10 flex flex-col items-center px-6 text-center">
+        <Chandelier className="chandelier" />
         <p className="eyebrow text-gold">حفل زفاف</p>
         <h1 className="script-title mt-3 text-ivory">{config.couple.display}</h1>
         <button type="button" className="envelope-trigger" onClick={open} aria-label="افتح دعوة الزفاف">
+          <Hydrangea className="envelope-bloom envelope-bloom-left" />
+          <Hydrangea className="envelope-bloom envelope-bloom-right" />
           <span className={opening ? "envelope is-open" : "envelope"}>
             <span className="envelope-letter"><span>{config.couple.monogram}</span></span>
             <span className="envelope-back" />
             <span className="envelope-flap" />
             <span className="envelope-front" />
+            <span className="envelope-ribbon" />
             <span className="seal">{config.couple.monogram}</span>
           </span>
         </button>

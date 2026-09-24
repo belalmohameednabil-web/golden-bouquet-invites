@@ -19,6 +19,31 @@ export function Hydrangea({ className }: { className?: string }) {
   return <svg viewBox="0 0 220 210" aria-hidden className={cn("pointer-events-none", className)}>{blooms.map(([x,y],i)=><g key={i} transform={`translate(${x} ${y})`} fill="none" stroke="currentColor" strokeWidth="1.5" opacity=".72"><path d="M0 0c-17-8-22 12-7 17C-18 31 1 38 7 21c16 10 26-8 10-18C23-13 2-19 0 0Z"/><circle r="2" fill="var(--color-gold)" stroke="none"/></g>)}<path d="M108 123c-7 31-1 58 17 78M91 131c-19 21-32 41-34 69" fill="none" stroke="currentColor" strokeWidth="2" opacity=".5"/></svg>;
 }
 
+export function Chandelier({ className }: { className?: string }) {
+  const arms = [-78, -47, -16, 16, 47, 78];
+  return (
+    <svg viewBox="0 0 220 190" fill="none" aria-hidden className={cn("pointer-events-none", className)}>
+      <path d="M110 0v30" stroke="currentColor" strokeWidth="2" opacity=".75"/>
+      <path d="M92 30h36l-7 13H99Z" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <path d="M110 43v58" stroke="currentColor" strokeWidth="2" opacity=".75"/>
+      {arms.map((x) => {
+        const y = 60 + Math.abs(x) * 0.05;
+        return (
+          <g key={x}>
+            <path d={`M110 ${y}C ${110 + x * 0.55} ${y - 4} ${110 + x} ${y + 8} ${110 + x} ${y + 24}`} stroke="currentColor" strokeWidth="2" fill="none" opacity=".8"/>
+            <ellipse cx={110 + x} cy={y + 27} rx="6" ry="3.5" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+            <path d={`M${110 + x} ${y + 23}c-4-9 4-9 0-17`} fill="var(--color-gold)" stroke="none" opacity=".95"/>
+          </g>
+        );
+      })}
+      <path d="M32 84c34 24 122 24 156 0" stroke="currentColor" strokeWidth="1.5" opacity=".4"/>
+      {[...Array(9)].map((_, i) => (
+        <path key={i} d={`M${34 + i * 19} ${86 + Math.sin(i) * 3}l4 15-4 6-4-6Z`} fill="var(--color-gold)" opacity=".6"/>
+      ))}
+    </svg>
+  );
+}
+
 export function GoldDivider({ className }: { className?: string }) {
   return <svg viewBox="0 0 240 32" aria-hidden className={className}><path d="M0 16h91m58 0h91M102 16c8-2 14-8 18-16 4 8 10 14 18 16-8 2-14 8-18 16-4-8-10-14-18-16Z" fill="none" stroke="currentColor" strokeWidth="1"/><circle cx="120" cy="16" r="3" fill="currentColor"/></svg>;
 }
