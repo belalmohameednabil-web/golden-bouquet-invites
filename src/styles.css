@@ -231,6 +231,7 @@ body { font-family: "Amiri", serif; }
 .guest-form, .responses { text-align: right; }
 .record { right: auto; left: -38px; }
 .music-fab { right: auto !important; left: 1rem; }
+.youtube-audio { position:fixed; left:-9999px; bottom:0; width:200px; height:200px; border:0; pointer-events:none; }
 .rsvp-button span:not(.bird), .wish-button span { display: flex; flex-direction: column; align-items: center; gap: .1rem; }
 .rsvp-button small, .wish-button small { font-size: .65rem; font-weight: 400; opacity: .72; }
 .envelope-letter { border: 5px double color-mix(in oklab,var(--gold) 48%,transparent); background: repeating-linear-gradient(45deg,color-mix(in oklab,var(--ivory) 98%,var(--gold)) 0 8px,var(--ivory) 8px 16px); }

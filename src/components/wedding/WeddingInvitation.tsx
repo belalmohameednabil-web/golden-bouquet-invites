@@ -32,9 +32,9 @@ function getDeviceId() {
   return next;
 }
 
-function Intro({ onOpen }: { onOpen: () => void }) {
+function Intro({ onOpen, onStartMusic }: { onOpen: () => void; onStartMusic: () => void }) {
   const [opening, setOpening] = useState(false);
-  const open = () => { if (opening) return; setOpening(true); window.setTimeout(onOpen, 1550); };
+  const open = () => { if (opening) return; setOpening(true); onStartMusic(); window.setTimeout(onOpen, 1550); };
   return (
     <motion.section className="intro-screen" animate={opening ? { opacity: 0, y: "-8%" } : { opacity: 1 }} transition={{ duration: .8, delay: opening ? .85 : 0 }}>
       <CallaLilies className="intro-floral intro-floral-left" />
@@ -69,7 +69,7 @@ function Hero({ playing, onToggle }: { playing: boolean; onToggle: () => void })
         <div className="hero-letter"><span>احفظوا الموعد</span><strong>{config.couple.display}</strong><small>{config.event.footerDate}</small></div>
         <div className="hero-envelope-back" /><div className="hero-envelope-front" />
       </div>
-      <button type="button" className={`record ${playing ? "is-playing" : ""}`} onClick={onToggle} aria-label={playing ? "إيقاف الموسيقى مؤقتاً" : "تشغيل الموسيقى"} title={config.music.src ? undefined : "ستتوفر الموسيقى فور إضافة ملف الأغنية"}>
+      <button type="button" className={`record ${playing ? "is-playing" : ""}`} onClick={onToggle} aria-label={playing ? "إيقاف الموسيقى مؤقتاً" : "تشغيل الموسيقى"}>
         <svg className="record-copy" viewBox="0 0 200 200" aria-hidden><defs><path id="recordPath" d="M 30,100 A 70,70 0 1,1 170,100" /></defs><text><textPath href="#recordPath" startOffset="2%">اضغط على الأسطوانة للتشغيل • </textPath></text></svg>
         <span className="record-center">{playing ? <Pause /> : <Play />}</span>
       </button>
@@ -137,11 +137,13 @@ function Guestbook() {
 }
 
 export function WeddingInvitation() {
-  const [opened,setOpened]=useState(false); const [playing,setPlaying]=useState(false); const [muted,setMuted]=useState(false); const audio=useRef<HTMLAudioElement>(null); const wasPlaying=useRef(false);
+  const [opened,setOpened]=useState(false); const [playing,setPlaying]=useState(false); const [muted,setMuted]=useState(false); const player=useRef<HTMLIFrameElement>(null); const wasPlaying=useRef(false);
   useEffect(()=>{const stored=localStorage.getItem("oe-wedding-muted")==="true";setMuted(stored)},[]);
-  const start=()=>{setOpened(true); if(config.music.src&&audio.current){audio.current.volume=0; void audio.current.play().then(()=>{setPlaying(true); let v=0; const fade=window.setInterval(()=>{v=Math.min(1,v+.08);if(audio.current)audio.current.volume=v;if(v>=1)clearInterval(fade)},80)}).catch(()=>setPlaying(false))}};
-  const toggle=()=>{if(!config.music.src||!audio.current)return;if(playing){audio.current.pause();setPlaying(false)}else{void audio.current.play();setPlaying(true)}};
-  const toggleMute=()=>{const next=!muted;setMuted(next);localStorage.setItem("oe-wedding-muted",String(next));if(audio.current)audio.current.muted=next};
-  useEffect(()=>{const visibility=()=>{if(document.hidden){wasPlaying.current=playing;if(playing){audio.current?.pause();setPlaying(false)}}else if(wasPlaying.current&&audio.current){void audio.current.play();setPlaying(true);wasPlaying.current=false}};document.addEventListener("visibilitychange",visibility);return()=>document.removeEventListener("visibilitychange",visibility)},[playing]);
-  return <main className="wedding-page">{config.music.src&&<audio ref={audio} src={config.music.src} loop muted={muted}/>} {!opened?<Intro onOpen={start}/>:<motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1}}><div className="ambient" aria-hidden>{Array.from({length:14}).map((_,i)=><span key={i} style={{left:`${(i*37)%100}%`,animationDelay:`${i*.7}s`,animationDuration:`${7+i%5}s`}}/>)}</div><Button size="icon" className="music-fab" onClick={toggleMute} aria-label={muted?"تشغيل صوت الموسيقى":"كتم الموسيقى"} title={muted?"تشغيل صوت الموسيقى":"كتم الموسيقى"}>{muted?<VolumeX/>:playing?<Volume2/>:<Music2/>}</Button><Hero playing={playing} onToggle={toggle}/><InvitationCard/><Countdown/><التفاصيل/><Venue/><Guestbook/><footer><div className="footer-monogram">{config.couple.monogram}</div><p>بانتظاركم لتكتمل فرحتنا</p><span>{config.event.footerDate}</span><GoldDivider /></footer></motion.div>}</main>;
+  const command=useCallback((func:string,args:unknown[]=[])=>{player.current?.contentWindow?.postMessage(JSON.stringify({event:"command",func,args}),"https://www.youtube.com")},[]);
+  const startMusic=()=>{command(muted?"mute":"unMute");command("setVolume",[0]);command("playVideo");setPlaying(true);let volume=0;const fade=window.setInterval(()=>{volume=Math.min(70,volume+7);command("setVolume",[volume]);if(volume>=70)window.clearInterval(fade)},100)};
+  const toggle=()=>{if(playing){command("pauseVideo");setPlaying(false)}else{command("playVideo");setPlaying(true)}};
+  const toggleMute=()=>{const next=!muted;setMuted(next);localStorage.setItem("oe-wedding-muted",String(next));command(next?"mute":"unMute")};
+  useEffect(()=>{const visibility=()=>{if(document.hidden){wasPlaying.current=playing;if(playing){command("pauseVideo");setPlaying(false)}}else if(wasPlaying.current){command("playVideo");setPlaying(true);wasPlaying.current=false}};document.addEventListener("visibilitychange",visibility);return()=>document.removeEventListener("visibilitychange",visibility)},[playing,command]);
+  const playerSrc=`https://www.youtube.com/embed/${config.music.youtubeId}?enablejsapi=1&autoplay=0&controls=0&loop=1&playlist=${config.music.youtubeId}&playsinline=1&rel=0`;
+  return <main className="wedding-page"><iframe ref={player} className="youtube-audio" src={playerSrc} title={`${config.music.title} — ${config.music.artist}`} allow="autoplay; encrypted-media" tabIndex={-1}/>{!opened?<Intro onOpen={()=>setOpened(true)} onStartMusic={startMusic}/>:<motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1}}><div className="ambient" aria-hidden>{Array.from({length:14}).map((_,i)=><span key={i} style={{left:`${(i*37)%100}%`,animationDelay:`${i*.7}s`,animationDuration:`${7+i%5}s`}}/>)}</div><Button size="icon" className="music-fab" onClick={toggleMute} aria-label={muted?"تشغيل صوت الموسيقى":"كتم الموسيقى"} title={muted?"تشغيل صوت الموسيقى":"كتم الموسيقى"}>{muted?<VolumeX/>:playing?<Volume2/>:<Music2/>}</Button><Hero playing={playing} onToggle={toggle}/><InvitationCard/><Countdown/><التفاصيل/><Venue/><Guestbook/><footer><div className="footer-monogram">{config.couple.monogram}</div><p>بانتظاركم لتكتمل فرحتنا</p><span>{config.event.footerDate}</span><GoldDivider /></footer></motion.div>}</main>;
 }
