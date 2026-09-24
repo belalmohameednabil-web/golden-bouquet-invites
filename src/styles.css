@@ -186,15 +186,26 @@ button, input, textarea { letter-spacing: 0; }
 .intro-screen { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; min-height: 100svh; overflow: hidden; background-color: var(--ink); background-image: radial-gradient(circle at 50% 35%, color-mix(in oklab,var(--olive) 22%,transparent), transparent 42%), repeating-linear-gradient(93deg,transparent 0 3px,color-mix(in oklab,var(--ivory) 2%,transparent) 3px 4px); }
 .intro-floral { position: absolute; width: min(48vw, 320px); color: color-mix(in oklab,var(--ivory) 35%,transparent); }
 .intro-floral-left { left: -15%; bottom: -8%; transform: rotate(-9deg); }.intro-floral-right { right: -15%; top: -7%; transform: scaleX(-1) rotate(-12deg); }
-.envelope-trigger { margin-top: 3.5rem; border: 0; background: none; padding: 1.8rem; perspective: 1000px; cursor: pointer; }
+.chandelier { width: min(46vw, 176px); color: var(--gold); margin-bottom: -.6rem; filter: drop-shadow(0 6px 16px oklch(0 0 0 / .4)); animation: chandelier-glow 3.6s ease-in-out infinite; }
+@keyframes chandelier-glow { 0%,100% { opacity: .82; } 50% { opacity: 1; filter: drop-shadow(0 8px 22px color-mix(in oklab,var(--gold) 55%,transparent)); } }
+.envelope-trigger { position: relative; margin-top: 2.2rem; border: 0; background: none; padding: 1.8rem; perspective: 1000px; cursor: pointer; }
+.envelope-trigger::before,.envelope-trigger::after { content:""; position:absolute; width:5px; height:5px; border-radius:50%; background:var(--gold); box-shadow:0 0 8px 2px color-mix(in oklab,var(--gold) 70%,transparent); animation:twinkle 2.8s ease-in-out infinite; }
+.envelope-trigger::before { top:10%; left:4%; animation-delay:.3s; }
+.envelope-trigger::after { top:16%; right:6%; animation-delay:1.2s; }
+@keyframes twinkle { 0%,100% { opacity:.15; transform:scale(.5); } 50% { opacity:1; transform:scale(1.3); } }
 .envelope { position: relative; display: block; width: min(76vw, 390px); aspect-ratio: 1.58; filter: drop-shadow(0 24px 25px oklch(0 0 0 / .35)); transition: transform 1s ease; }
+.envelope::before { content:""; position:absolute; inset:-16px; border:1px solid color-mix(in oklab,var(--gold) 40%,transparent); border-radius:8px; opacity:.65; pointer-events:none; }
+.envelope-bloom { position:absolute; z-index:6; width:70px; opacity:.9; pointer-events:none; }
+.envelope-bloom-left { left:-20px; bottom:-14px; color:color-mix(in oklab,var(--gold) 60%,var(--ivory)); transform:rotate(-20deg); }
+.envelope-bloom-right { right:-20px; bottom:-14px; color:color-mix(in oklab,var(--gold) 60%,var(--ivory)); transform:scaleX(-1) rotate(-20deg); }
 .envelope-back,.envelope-front,.envelope-flap,.envelope-letter { position:absolute; inset:0; border:1px solid color-mix(in oklab,var(--gold) 45%,transparent); }
 .envelope-back { background: var(--ivory); }.envelope-front { z-index:4; background: linear-gradient(145deg,transparent 49.4%,color-mix(in oklab,var(--ivory) 94%,var(--taupe)) 50%) 0 0/50.2% 100% no-repeat,linear-gradient(215deg,transparent 49.4%,var(--ivory) 50%) 100% 0/50.2% 100% no-repeat,linear-gradient(35deg,transparent 49%,var(--ivory) 50%); }
 .envelope-flap { z-index:5; height:59%; transform-origin:top; background: var(--ivory); clip-path:polygon(0 0,100% 0,50% 100%); transition:transform .9s cubic-bezier(.65,0,.35,1),z-index .1s .4s; }
 .envelope-flap:after { content:""; position:absolute; inset:9px; border:4px dotted color-mix(in oklab,var(--taupe) 35%,transparent); clip-path:polygon(0 0,100% 0,50% 100%); }
 .envelope-letter { z-index:2; inset:7% 8% 0; display:grid;place-items:center;background:color-mix(in oklab,var(--ivory) 95%,var(--gold));font-family:"Great Vibes";font-size:2rem;color:var(--gold);transition:transform .9s .45s; }
+.envelope-ribbon { position:absolute; z-index:6; top:0; bottom:0; left:50%; width:13%; transform:translateX(-50%); background:linear-gradient(90deg,color-mix(in oklab,var(--gold) 70%,var(--ink)) 0%,var(--gold) 45%,color-mix(in oklab,var(--gold) 70%,var(--ivory)) 55%,color-mix(in oklab,var(--gold) 70%,var(--ink)) 100%); box-shadow:0 0 12px color-mix(in oklab,var(--gold) 50%,transparent); transition:opacity .4s; }
 .seal { position:absolute;z-index:7;left:50%;top:48%;display:grid;width:50px;aspect-ratio:1;place-items:center;transform:translate(-50%,-50%);border:2px solid color-mix(in oklab,var(--ivory) 55%,transparent);border-radius:50%;background:radial-gradient(circle at 35% 30%,color-mix(in oklab,var(--gold) 75%,var(--ivory)),var(--gold) 60%,color-mix(in oklab,var(--gold) 70%,var(--ink)));font-size:.8rem;font-weight:600;color:var(--ivory);box-shadow:0 5px 12px oklch(0 0 0/.25);transition:opacity .3s .25s; }
-.envelope.is-open { transform:translateY(26vh); }.envelope.is-open .envelope-flap{z-index:1;transform:rotateX(178deg)}.envelope.is-open .envelope-letter{transform:translateY(-78%)}.envelope.is-open .seal{opacity:0}
+.envelope.is-open { transform:translateY(26vh); }.envelope.is-open .envelope-flap{z-index:1;transform:rotateX(178deg)}.envelope.is-open .envelope-letter{transform:translateY(-78%)}.envelope.is-open .seal{opacity:0}.envelope.is-open .envelope-ribbon{opacity:0}
 .tap-open { border:0;background:none;color:var(--ivory);font-family:inherit;font-size:1.1rem;letter-spacing:.12em;cursor:pointer;animation:pulse 2s infinite; }
 @keyframes pulse{50%{opacity:.55;text-shadow:0 0 18px var(--gold)}}
 
