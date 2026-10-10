@@ -1,5 +1,5 @@
 export const weddingConfig = {
-  couple: { first: "إيمان", second: "أسامة", display: "إيمان & أسامة", monogram: "إ & أ" },
+  couple: { first: "هايدي", second: "كيرلس", display: "هايدي & كيرلس", monogram: "ه & ك" },
   hosts: { first: "السيد تركي لمعي", second: "السيد عاطف شكر الله" },
   event: {
     type: "حفل خطوبة",
