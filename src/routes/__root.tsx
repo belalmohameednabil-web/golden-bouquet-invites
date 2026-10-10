@@ -77,9 +77,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Osama & Eman" },
-      { name: "description", content: "دعوة زفاف Osama & Eman." },
-      { name: "author", content: "Osama & Eman" },
+      { title: "كيرلس & هايدي" },
+      { name: "description", content: "دعوة خطوبة كيرلس & هايدي." },
+      { name: "author", content: "كيرلس & هايدي" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

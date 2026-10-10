@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { CallaLilies, Chandelier, GoldDivider, Hydrangea, VillaIllustration } from "./Ornaments";
+import couplePhoto from "@/assets/couple.png.asset.json";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 type Rsvp = Tables<"wedding_rsvps">;
@@ -41,9 +42,9 @@ function Intro({ onOpen, onStartMusic }: { onOpen: () => void; onStartMusic: () 
       <CallaLilies className="intro-floral intro-floral-right" />
       <div className="relative z-10 flex flex-col items-center px-6 text-center">
         <Chandelier className="chandelier" />
-        <p className="eyebrow text-gold">حفل زفاف</p>
+        <p className="eyebrow text-gold">{config.event.type}</p>
         <h1 className="script-title mt-3 text-ivory">{config.couple.display}</h1>
-        <button type="button" className="envelope-trigger" onClick={open} aria-label="افتح دعوة الزفاف">
+        <button type="button" className="envelope-trigger" onClick={open} aria-label="افتح دعوة الخطوبة">
           <Hydrangea className="envelope-bloom envelope-bloom-left" />
           <Hydrangea className="envelope-bloom envelope-bloom-right" />
           <span className={opening ? "envelope is-open" : "envelope"}>
@@ -69,9 +70,15 @@ function Hero({ playing, onToggle }: { playing: boolean; onToggle: () => void })
       <motion.div style={{ y }} className="absolute -left-14 -top-8 w-52 text-ivory/70 sm:w-72"><CallaLilies /></motion.div>
       <motion.div style={{ y }} className="absolute -right-14 top-10 w-48 -scale-x-100 text-ivory/70 sm:w-72"><CallaLilies /></motion.div>
       <div className="monogram-badge">{config.couple.monogram}</div>
-      <div className="opened-envelope" aria-hidden>
-        <div className="hero-letter"><span>احفظوا الموعد</span><strong>{config.couple.display}</strong><small>{config.event.footerDate}</small></div>
-        <div className="hero-envelope-back" /><div className="hero-envelope-front" />
+      <div className="couple-arch">
+        <div className="couple-arch-frame">
+          <img src={couplePhoto.url} alt={`${config.couple.first} و ${config.couple.second}`} />
+        </div>
+        <div className="couple-name-plates">
+          <span className="name-plate">{config.couple.first}</span>
+          <span className="rings" aria-hidden><Heart /><Heart /></span>
+          <span className="name-plate">{config.couple.second}</span>
+        </div>
       </div>
       <button type="button" className={`record ${playing ? "is-playing" : ""}`} onClick={onToggle} aria-label={playing ? "إيقاف الموسيقى مؤقتاً" : "تشغيل الموسيقى"}>
         <svg className="record-copy" viewBox="0 0 200 200" aria-hidden><defs><path id="recordPath" d="M 30,100 A 70,70 0 1,1 170,100" /></defs><text><textPath href="#recordPath" startOffset="2%">اضغط على الأسطوانة للتشغيل • </textPath></text></svg>
@@ -84,14 +91,14 @@ function Hero({ playing, onToggle }: { playing: boolean; onToggle: () => void })
 
 function InvitationCard() {
   return <section className="invitation-band"><Reveal className="invitation-card"><div className="lace-frame" /><div className="relative z-10 mx-auto max-w-xl text-center">
-    <p className="invocation">بسم الله الرحمن الرحيم</p>
+    <p className="invocation">تتشرف كل من</p>
+    <div className="hosts-row"><strong>{config.hosts.first}</strong><span className="hosts-amp">&</span><strong>{config.hosts.second}</strong></div>
     <GoldDivider className="mx-auto my-7 w-36 text-gold" />
-    <blockquote>﴿وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ﴾</blockquote>
-    <p className="mt-8 text-sm uppercase tracking-[.22em]">نتشرف</p>
-    <p className="mt-4 text-lg">بدعوتكم لحضور حفل زفاف</p>
+    <p className="mt-2 text-lg">بدعوتكم لحضور {config.event.type} نجليهما</p>
     <h2 className="couple-script">{config.couple.display}</h2>
     <GoldDivider className="mx-auto my-5 w-48 text-gold" />
-    <div className="invitation-facts"><p><CalendarDays />{config.event.dateLong}</p><p><MapPin />{config.venue.name}</p><p className="max-w-sm"><span className="icon-spacer" />{config.venue.address}</p><p><Clock3 />{config.event.time}</p></div>
+    <div className="invitation-facts"><p><CalendarDays />{config.event.dateLong}</p><p><Clock3 />{config.church.time} — {config.church.name}</p><p><Clock3 />{config.venue.time} — {config.venue.name}</p><p className="max-w-sm"><MapPin />{config.venue.address}</p></div>
+    <p className="open-invitation">{config.event.openInvitation}</p>
   </div></Reveal></section>;
 }
 
@@ -104,16 +111,16 @@ function Countdown() {
   const labels = ["يوم", "ساعة", "دقيقة", "ثانية"];
   const eastern = (value: number) => String(value).padStart(2, "0").replace(/[0-9]/g, digit => "٠١٢٣٤٥٦٧٨٩".charAt(Number(digit)));
   const downloadIcs = () => {
-    const body = `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Osama & Eman//Wedding//EN\r\nBEGIN:VEVENT\r\nUID:osama-eman-wedding-20261008\r\nDTSTAMP:20260923T091400Z\r\nDTSTART:20261008T170000Z\r\nDTEND:20261008T210000Z\r\nSUMMARY:Osama & Eman's Wedding\r\nLOCATION:${config.venue.name} - ${config.venue.address}\r\nDESCRIPTION:Celebrate the wedding of Osama & Eman\r\nEND:VEVENT\r\nEND:VCALENDAR`;
-    const url = URL.createObjectURL(new Blob([body], { type: "text/calendar" })); const a = document.createElement("a"); a.href = url; a.download = "osama-eman-wedding.ics"; a.click(); URL.revokeObjectURL(url);
+    const body = `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Kyrillos & Heidi//Engagement//EN\r\nBEGIN:VEVENT\r\nUID:kyrillos-heidi-engagement-20261016\r\nDTSTAMP:20261010T091400Z\r\nDTSTART:20261016T150000Z\r\nDTEND:20261016T190000Z\r\nSUMMARY:خطوبة كيرلس وهايدي\r\nLOCATION:${config.venue.name} - ${config.venue.address}\r\nDESCRIPTION:حفل خطوبة كيرلس وهايدي\r\nEND:VEVENT\r\nEND:VCALENDAR`;
+    const url = URL.createObjectURL(new Blob([body], { type: "text/calendar" })); const a = document.createElement("a"); a.href = url; a.download = "kyrillos-heidi-engagement.ics"; a.click(); URL.revokeObjectURL(url);
   };
-  return <section className="countdown-section"><Reveal><p className="eyebrow text-gold">موعدنا اقترب</p><h2 className="section-title">باقي على فرحتنا</h2>{remaining === 0 ? <p className="just-married">تم الزفاف بحمد الله <Heart fill="currentColor" /></p> : <div className="countdown-grid">{values.map((value, i) => <div key={labels[i]} className="countdown-cell"><strong>{eastern(value)}</strong><span>{labels[i]}</span></div>)}</div>}<div className="mt-9 flex flex-wrap justify-center gap-3"><Button asChild className="wedding-button"><a href={config.calendar.google} target="_blank" rel="noreferrer"><CalendarDays />أضف إلى Google</a></Button><Button variant="outline" className="wedding-button-outline" onClick={downloadIcs}><Download />تحميل الموعد</Button></div></Reveal></section>;
+  return <section className="countdown-section"><Reveal><p className="eyebrow text-gold">موعدنا اقترب</p><h2 className="section-title">باقي على فرحتنا</h2>{remaining === 0 ? <p className="just-married">تمت الخطوبة بحمد الله <Heart fill="currentColor" /></p> : <div className="countdown-grid">{values.map((value, i) => <div key={labels[i]} className="countdown-cell"><strong>{eastern(value)}</strong><span>{labels[i]}</span></div>)}</div>}<div className="mt-9 flex flex-wrap justify-center gap-3"><Button asChild className="wedding-button"><a href={config.calendar.google} target="_blank" rel="noreferrer"><CalendarDays />أضف إلى Google</a></Button><Button variant="outline" className="wedding-button-outline" onClick={downloadIcs}><Download />تحميل الموعد</Button></div></Reveal></section>;
 }
 
 const timeline = [
   { label: "التاريخ", value: config.event.dateShort, icon: CalendarDays },
-  { label: "المكان", value: config.venue.name, icon: MapPin },
-  { label: "الموعد", value: config.event.timeShort, icon: Heart },
+  { label: "الكنيسة", value: `${config.church.name} — ${config.church.timeShort}`, icon: MapPin },
+  { label: "القاعة", value: `${config.venue.name} — ${config.venue.timeShort}`, icon: Heart },
 ];
 function التفاصيل() {
   return <section className="details-section"><Hydrangea className="absolute -left-12 top-10 w-56 text-ivory/40"/><CallaLilies className="absolute -right-12 bottom-0 w-48 -scale-x-100 text-ivory/35"/><Reveal><p className="eyebrow text-gold">ليلة العمر</p><h2 className="section-title text-ivory">التفاصيل</h2></Reveal><div className="timeline">{timeline.map(({ label,value,icon: Icon }, i)=><Reveal key={label} delay={i*.12} className="timeline-item"><span className="timeline-dot"><Icon /></span><div><p>{label}</p><strong>{value}</strong></div></Reveal>)}</div></section>;
@@ -136,7 +143,7 @@ function Guestbook() {
   const submitRsvp = async (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); setBusy(true); setNotice(""); const data=new FormData(e.currentTarget); const name=String(data.get("name")??"").trim().slice(0,80); const guests=Number(data.get("guests")??1); if(localStorage.getItem("oe-rsvp-sent")){setNotice("تم إرسال تأكيد حضور من هذا الجهاز من قبل.");setBusy(false);return} const {error}=await supabase.from("wedding_rsvps").insert({name,attending:attending==="yes",guest_count:attending==="yes"?Math.min(Math.max(guests,1),10):0,device_id:getDeviceId()}); if(error){setNotice(error.code==="23505"?"تم إرسال تأكيد حضور من هذا الجهاز من قبل.":"تعذر حفظ ردك، حاول مرة أخرى.")}else{localStorage.setItem("oe-rsvp-sent","1");setNotice("شكراً لتأكيد حضورك، في انتظارك.");(e.target as HTMLFormElement).reset();void load()} setBusy(false); };
   const submitWish = async (e: FormEvent<HTMLFormElement>) => { e.preventDefault(); setBusy(true); setNotice(""); const data=new FormData(e.currentTarget); const name=String(data.get("name")??"").trim().slice(0,80); const message=String(data.get("message")??"").trim().slice(0,500); if(localStorage.getItem("oe-wish-sent")){setNotice("تم إرسال تهنئة من هذا الجهاز من قبل.");setBusy(false);return} const {error}=await supabase.from("wedding_wishes").insert({name,message,device_id:getDeviceId()}); if(error){setNotice(error.code==="23505"?"تم إرسال تهنئة من هذا الجهاز من قبل.":"تعذر إرسال التهنئة، حاول مرة أخرى.")}else{localStorage.setItem("oe-wish-sent","1");setNotice("شكراً لك، أضفنا تهنئتك الجميلة.");(e.target as HTMLFormElement).reset();void load()} setBusy(false); };
   return <section className="guestbook-section"><Hydrangea className="absolute -right-10 -top-10 w-52 text-olive/30"/><Reveal className="guestbook-frame"><p className="eyebrow text-taupe">شاركونا فرحتنا</p><h2 className="section-title">وجودكم يسعدنا</h2><p className="mx-auto mt-3 max-w-md text-taupe">أكدوا حضوركم أو اتركوا لنا كلمة جميلة تبقى ذكرى في بداية حكايتنا.</p><div className="guest-actions"><Button className="rsvp-button" onClick={()=>{setNotice("");setDialog("rsvp")}}><span className="bird">⌁</span>تأكيد الحضور</Button><Button className="wish-button" onClick={()=>{setNotice("");setDialog("wish")}}><Heart /><span>شاركونا تهانيكم<small>اضغط هنا</small></span></Button></div>{wishes.length>0&&<div className="wish-preview"><p className="eyebrow text-taupe">تهاني الأحباب</p><div className="wish-grid">{wishes.slice(0,3).map(w=><motion.article initial={{opacity:0,scale:.96}} animate={{opacity:1,scale:1}} key={w.id}><Heart /><p>“{w.message}”</p><span>— {w.name}</span></motion.article>)}</div></div>}</Reveal>
-  <Dialog open={dialog!==null} onOpenChange={o=>{if(!o)setDialog(null)}}><DialogContent className="guest-dialog"><DialogHeader><DialogTitle>{dialog==="rsvp"?"تأكيد الحضور":"شاركونا تهانيكم"}</DialogTitle><DialogDescription>{dialog==="rsvp"?"يسعدنا معرفة إن كنتم ستشاركوننا فرحتنا.":"اكتبوا لـ Osama & Eman كلمات من القلب."}</DialogDescription></DialogHeader>{dialog==="rsvp"?<><form onSubmit={submitRsvp} className="guest-form"><Label htmlFor="rsvp-name">الاسم</Label><Input id="rsvp-name" name="name" required maxLength={80} placeholder="اكتب اسمك"/><RadioGroup value={attending} onValueChange={setAttending} className="my-2"><Label className="radio-row"><RadioGroupItem value="yes"/>نعم، سأحضر إن شاء الله</Label><Label className="radio-row"><RadioGroupItem value="no"/>للأسف لن أستطيع الحضور</Label></RadioGroup>{attending==="yes"&&<><Label htmlFor="guests">عدد الأفراد</Label><Input id="guests" name="guests" type="number" min={1} max={10} defaultValue={1}/></>}<Button disabled={busy} className="wedding-button mt-2" type="submit"><Send />{busy?"جارٍ الإرسال…":"إرسال"}</Button></form><div className="responses"><h3>قائمة الحضور <span>{rsvps.length}</span></h3><div className="response-grid">{rsvps.map(r=><article key={r.id}><strong>{r.name}</strong><small className={r.attending?"attending":"not-attending"}>{r.attending?<><Check/>سيحضر</>:"لن يحضر"}</small></article>)}</div></div></>:<><form onSubmit={submitWish} className="guest-form"><Label htmlFor="wish-name">الاسم</Label><Input id="wish-name" name="name" required maxLength={80} placeholder="اكتب اسمك"/><Label htmlFor="message">التهنئة</Label><Textarea id="message" name="message" required minLength={2} maxLength={500} rows={4} placeholder="اكتب تهنئتك"/><Button disabled={busy} className="wedding-button mt-2" type="submit"><Send />{busy?"جارٍ النشر…":"إرسال التهنئة"}</Button></form><div className="responses"><h3>تهاني الأحباب <span>{wishes.length}</span></h3><div className="response-grid wishes-scroll">{wishes.map(w=><article key={w.id}><p>“{w.message}”</p><strong>— {w.name}</strong></article>)}</div></div></>}{notice&&<p className="form-notice" role="status">{notice}</p>}<Button variant="ghost" className="back-button" onClick={()=>setDialog(null)}>العودة للدعوة ←</Button></DialogContent></Dialog>
+  <Dialog open={dialog!==null} onOpenChange={o=>{if(!o)setDialog(null)}}><DialogContent className="guest-dialog"><DialogHeader><DialogTitle>{dialog==="rsvp"?"تأكيد الحضور":"شاركونا تهانيكم"}</DialogTitle><DialogDescription>{dialog==="rsvp"?"يسعدنا معرفة إن كنتم ستشاركوننا فرحتنا.":`اكتبوا لـ ${config.couple.display} كلمات من القلب.`}</DialogDescription></DialogHeader>{dialog==="rsvp"?<><form onSubmit={submitRsvp} className="guest-form"><Label htmlFor="rsvp-name">الاسم</Label><Input id="rsvp-name" name="name" required maxLength={80} placeholder="اكتب اسمك"/><RadioGroup value={attending} onValueChange={setAttending} className="my-2"><Label className="radio-row"><RadioGroupItem value="yes"/>نعم، سأحضر إن شاء الله</Label><Label className="radio-row"><RadioGroupItem value="no"/>للأسف لن أستطيع الحضور</Label></RadioGroup>{attending==="yes"&&<><Label htmlFor="guests">عدد الأفراد</Label><Input id="guests" name="guests" type="number" min={1} max={10} defaultValue={1}/></>}<Button disabled={busy} className="wedding-button mt-2" type="submit"><Send />{busy?"جارٍ الإرسال…":"إرسال"}</Button></form><div className="responses"><h3>قائمة الحضور <span>{rsvps.length}</span></h3><div className="response-grid">{rsvps.map(r=><article key={r.id}><strong>{r.name}</strong><small className={r.attending?"attending":"not-attending"}>{r.attending?<><Check/>سيحضر</>:"لن يحضر"}</small></article>)}</div></div></>:<><form onSubmit={submitWish} className="guest-form"><Label htmlFor="wish-name">الاسم</Label><Input id="wish-name" name="name" required maxLength={80} placeholder="اكتب اسمك"/><Label htmlFor="message">التهنئة</Label><Textarea id="message" name="message" required minLength={2} maxLength={500} rows={4} placeholder="اكتب تهنئتك"/><Button disabled={busy} className="wedding-button mt-2" type="submit"><Send />{busy?"جارٍ النشر…":"إرسال التهنئة"}</Button></form><div className="responses"><h3>تهاني الأحباب <span>{wishes.length}</span></h3><div className="response-grid wishes-scroll">{wishes.map(w=><article key={w.id}><p>“{w.message}”</p><strong>— {w.name}</strong></article>)}</div></div></>}{notice&&<p className="form-notice" role="status">{notice}</p>}<Button variant="ghost" className="back-button" onClick={()=>setDialog(null)}>العودة للدعوة ←</Button></DialogContent></Dialog>
   </section>;
 }
 
