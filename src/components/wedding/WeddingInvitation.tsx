@@ -74,7 +74,7 @@ function Hero({ playing, onToggle }: { playing: boolean; onToggle: () => void })
       <div className="monogram-badge">{config.couple.monogram}</div>
       <div className="couple-arch">
         <div className="couple-arch-frame">
-          <img src={couplePhoto.url} alt={`${config.couple.first} و ${config.couple.second}`} />
+          <img src={couplePhoto.url} alt={`${config.couple.first} و ${config.couple.second}`} loading="eager" decoding="async" />
         </div>
         <div className="couple-name-plates">
           <span className="name-plate">{config.couple.first}</span>
