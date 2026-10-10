@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { CallaLilies, Chandelier, GoldDivider, Hydrangea, VillaIllustration } from "./Ornaments";
-import couplePhoto from "@/assets/couple.png.asset.json";
+import couplePhoto from "@/assets/couple2.png.asset.json";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 type Rsvp = Tables<"wedding_rsvps">;
