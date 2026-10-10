@@ -70,9 +70,15 @@ function Hero({ playing, onToggle }: { playing: boolean; onToggle: () => void })
       <motion.div style={{ y }} className="absolute -left-14 -top-8 w-52 text-ivory/70 sm:w-72"><CallaLilies /></motion.div>
       <motion.div style={{ y }} className="absolute -right-14 top-10 w-48 -scale-x-100 text-ivory/70 sm:w-72"><CallaLilies /></motion.div>
       <div className="monogram-badge">{config.couple.monogram}</div>
-      <div className="opened-envelope" aria-hidden>
-        <div className="hero-letter"><span>احفظوا الموعد</span><strong>{config.couple.display}</strong><small>{config.event.footerDate}</small></div>
-        <div className="hero-envelope-back" /><div className="hero-envelope-front" />
+      <div className="couple-arch">
+        <div className="couple-arch-frame">
+          <img src={couplePhoto.url} alt={`${config.couple.first} و ${config.couple.second}`} />
+        </div>
+        <div className="couple-name-plates">
+          <span className="name-plate">{config.couple.first}</span>
+          <span className="rings" aria-hidden><Heart /><Heart /></span>
+          <span className="name-plate">{config.couple.second}</span>
+        </div>
       </div>
       <button type="button" className={`record ${playing ? "is-playing" : ""}`} onClick={onToggle} aria-label={playing ? "إيقاف الموسيقى مؤقتاً" : "تشغيل الموسيقى"}>
         <svg className="record-copy" viewBox="0 0 200 200" aria-hidden><defs><path id="recordPath" d="M 30,100 A 70,70 0 1,1 170,100" /></defs><text><textPath href="#recordPath" startOffset="2%">اضغط على الأسطوانة للتشغيل • </textPath></text></svg>
@@ -85,14 +91,14 @@ function Hero({ playing, onToggle }: { playing: boolean; onToggle: () => void })
 
 function InvitationCard() {
   return <section className="invitation-band"><Reveal className="invitation-card"><div className="lace-frame" /><div className="relative z-10 mx-auto max-w-xl text-center">
-    <p className="invocation">بسم الله الرحمن الرحيم</p>
+    <p className="invocation">تتشرف كل من</p>
+    <div className="hosts-row"><strong>{config.hosts.first}</strong><span className="hosts-amp">&</span><strong>{config.hosts.second}</strong></div>
     <GoldDivider className="mx-auto my-7 w-36 text-gold" />
-    <blockquote>﴿وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ﴾</blockquote>
-    <p className="mt-8 text-sm uppercase tracking-[.22em]">نتشرف</p>
-    <p className="mt-4 text-lg">بدعوتكم لحضور حفل زفاف</p>
+    <p className="mt-2 text-lg">بدعوتكم لحضور {config.event.type} نجليهما</p>
     <h2 className="couple-script">{config.couple.display}</h2>
     <GoldDivider className="mx-auto my-5 w-48 text-gold" />
-    <div className="invitation-facts"><p><CalendarDays />{config.event.dateLong}</p><p><MapPin />{config.venue.name}</p><p className="max-w-sm"><span className="icon-spacer" />{config.venue.address}</p><p><Clock3 />{config.event.time}</p></div>
+    <div className="invitation-facts"><p><CalendarDays />{config.event.dateLong}</p><p><Clock3 />{config.church.time} — {config.church.name}</p><p><Clock3 />{config.venue.time} — {config.venue.name}</p><p className="max-w-sm"><MapPin />{config.venue.address}</p></div>
+    <p className="open-invitation">{config.event.openInvitation}</p>
   </div></Reveal></section>;
 }
 
